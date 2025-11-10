@@ -1,3 +1,9 @@
+import sys
+from pathlib import Path
+
+# Add parent directory (where task.py is) to Python path
+sys.path.insert(0, str(Path(__file__).parent.parent))
+
 import pytest
 from task import two_sum
 
