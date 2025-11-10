@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Start the web dashboard
+# Change to web directory to ensure templates are found
+cd "$(dirname "$0")/.."
 python web/app.py
 
