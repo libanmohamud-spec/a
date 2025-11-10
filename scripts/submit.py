@@ -18,6 +18,7 @@ def run_pytest(target: Path, out_json: Path) -> tuple[int, str]:
         "pytest",
         "-q",
         str(target),
+        "--import-mode=importlib",
         "--json-report",
         f"--json-report-file={out_json}",
     ]
