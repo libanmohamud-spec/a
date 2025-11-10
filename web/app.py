@@ -45,7 +45,10 @@ def load_round_meta(pid: str, round_num: str) -> dict:
 @app.route('/')
 def index():
     """Main dashboard page."""
-    return render_template('index.html')
+    try:
+        return render_template('index.html')
+    except Exception as e:
+        return f"Error loading template: {str(e)}", 500
 
 
 @app.route('/api/participant/<participant_id>')
@@ -106,6 +109,11 @@ def list_participants():
 
 
 if __name__ == '__main__':
-    # Run on port 4311 (Codespaces will forward this)
-    app.run(host='0.0.0.0', port=4311, debug=True)
+    import os
+    # Use port from environment or default to 4311
+    port = int(os.environ.get('PORT', 4311))
+    print(f"Starting Flask app on port {port}...")
+    print(f"Template folder: {app.template_folder}")
+    print(f"Templates exist: {Path(app.template_folder).exists()}")
+    app.run(host='0.0.0.0', port=port, debug=True)
 
