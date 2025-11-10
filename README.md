@@ -56,6 +56,12 @@ Organizer utilities
 - Generate results report: `bin/report` (creates CSV summary from all participants)
 - Generate report to custom path: `bin/report -o path/to/report.csv`
 
+Optional: Web Dashboard
+- Start web dashboard: `bin/web` or `python web/app.py`
+- Access at: http://localhost:4311 (Codespaces will forward the port automatically)
+- View participant progress, assignments, and test results in a browser
+- Useful for participants to check their status without using terminal
+
 Optional: GitHub Action for automatic aggregation
 - A workflow file (`.github/workflows/aggregate-results.yml`) is provided for automatic CSV generation
 - Add it manually via GitHub UI (Actions → New workflow) due to OAuth scope restrictions

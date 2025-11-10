@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coding Experiment Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            color: white;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .input-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        
+        input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        
+        button:hover {
+            background: #5568d3;
+        }
+        
+        .status-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .round-card {
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 20px;
+        }
+        
+        .round-card.round1 {
+            border-color: #ff6b6b;
+        }
+        
+        .round-card.round2 {
+            border-color: #4ecdc4;
+        }
+        
+        .round-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .round-title {
+            font-size: 1.3em;
+            font-weight: 600;
+        }
+        
+        .badge {
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 600;
+        }
+        
+        .badge.not-allowed {
+            background: #ff6b6b;
+            color: white;
+        }
+        
+        .badge.allowed {
+            background: #4ecdc4;
+            color: white;
+        }
+        
+        .badge.submitted {
+            background: #51cf66;
+            color: white;
+        }
+        
+        .badge.not-submitted {
+            background: #ffd43b;
+            color: #333;
+        }
+        
+        .exercises {
+            margin-top: 15px;
+        }
+        
+        .exercise-item {
+            padding: 8px;
+            background: #f8f9fa;
+            margin-bottom: 5px;
+            border-radius: 5px;
+            font-size: 0.9em;
+        }
+        
+        .test-results {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #e0e0e0;
+        }
+        
+        .test-stat {
+            display: inline-block;
+            margin-right: 15px;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 0.9em;
+        }
+        
+        .test-stat.passed {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .test-stat.failed {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        
+        .test-stat.total {
+            background: #e2e3e5;
+            color: #383d41;
+        }
+        
+        .error {
+            color: #dc3545;
+            padding: 15px;
+            background: #f8d7da;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+        
+        .info-box {
+            background: #e7f3ff;
+            border-left: 4px solid #2196F3;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎯 Coding Experiment Dashboard</h1>
+        
+        <div class="card">
+            <div class="info-box">
+                <strong>Enter your participant ID</strong> to view your progress and assignments.
+            </div>
+            
+            <div class="input-group">
+                <label for="participant-id">Participant ID:</label>
+                <input type="text" id="participant-id" placeholder="e.g., p001, p002" />
+            </div>
+            
+            <button onclick="loadParticipant()">Load Status</button>
+            <button onclick="listAllParticipants()" style="background: #6c757d; margin-left: 10px;">List All Participants</button>
+        </div>
+        
+        <div id="status-container"></div>
+    </div>
+    
+    <script>
+        async function loadParticipant() {
+            const pid = document.getElementById('participant-id').value.trim();
+            if (!pid) {
+                alert('Please enter a participant ID');
+                return;
+            }
+            
+            const container = document.getElementById('status-container');
+            container.innerHTML = '<div class="card loading">Loading...</div>';
+            
+            try {
+                const response = await fetch(`/api/participant/${pid}`);
+                if (!response.ok) {
+                    throw new Error('Participant not found');
+                }
+                
+                const data = await response.json();
+                displayStatus(data);
+            } catch (error) {
+                container.innerHTML = `
+                    <div class="card">
+                        <div class="error">
+                            <strong>Error:</strong> ${error.message}. Make sure you've run <code>bin/init ${pid} yes</code> first.
+                        </div>
+                    </div>
+                `;
+            }
+        }
+        
+        function displayStatus(data) {
+            const container = document.getElementById('status-container');
+            
+            let html = `
+                <div class="card">
+                    <h2>Participant: ${data.participant_id}</h2>
+                    <p><strong>Experience Level:</strong> ${data.experienced ? 'Experienced' : 'Beginner'}</p>
+                </div>
+                
+                <div class="status-grid">
+            `;
+            
+            for (const [roundKey, roundData] of Object.entries(data.rounds)) {
+                const roundNum = roundKey.replace('round', '');
+                const isLLMAllowed = data.allow_llm[roundKey];
+                const exercises = data.assignments[roundKey] || [];
+                
+                html += `
+                    <div class="round-card round${roundNum}">
+                        <div class="round-header">
+                            <div class="round-title">Round ${roundNum}</div>
+                            <div>
+                                <span class="badge ${isLLMAllowed ? 'allowed' : 'not-allowed'}">
+                                    LLM ${isLLMAllowed ? 'Allowed' : 'Not Allowed'}
+                                </span>
+                                <span class="badge ${roundData.submitted ? 'submitted' : 'not-submitted'}">
+                                    ${roundData.submitted ? 'Submitted' : 'Not Submitted'}
+                                </span>
+                            </div>
+                        </div>
+                        
+                        <div class="exercises">
+                            <strong>Exercises:</strong>
+                            ${exercises.map(e => `
+                                <div class="exercise-item">${e.pool}/${e.exercise}</div>
+                            `).join('')}
+                        </div>
+                        
+                        ${roundData.submitted ? `
+                            <div class="test-results">
+                                <strong>Test Results:</strong><br>
+                                ${roundData.tests ? `
+                                    <span class="test-stat total">Total: ${roundData.tests.total}</span>
+                                    <span class="test-stat passed">Passed: ${roundData.tests.passed}</span>
+                                    <span class="test-stat failed">Failed: ${roundData.tests.failed}</span>
+                                ` : 'No test results available'}
+                                <br><small style="color: #666; margin-top: 10px; display: block;">
+                                    Submitted: ${roundData.submitted_at || 'N/A'}
+                                </small>
+                            </div>
+                        ` : '<p style="color: #666; margin-top: 15px;">Not yet submitted</p>'}
+                    </div>
+                `;
+            }
+            
+            html += '</div>';
+            container.innerHTML = html;
+        }
+        
+        async function listAllParticipants() {
+            try {
+                const response = await fetch('/api/participants');
+                const data = await response.json();
+                
+                const container = document.getElementById('status-container');
+                if (data.participants.length === 0) {
+                    container.innerHTML = '<div class="card"><p>No participants found.</p></div>';
+                    return;
+                }
+                
+                let html = '<div class="card"><h3>All Participants</h3><ul style="list-style: none; padding: 0;">';
+                data.participants.forEach(p => {
+                    html += `<li style="padding: 10px; margin: 5px 0; background: #f8f9fa; border-radius: 5px; cursor: pointer;" onclick="document.getElementById('participant-id').value='${p.id}'; loadParticipant();">
+                        <strong>${p.id}</strong> - ${p.experienced ? 'Experienced' : 'Beginner'}
+                    </li>`;
+                });
+                html += '</ul></div>';
+                container.innerHTML = html;
+            } catch (error) {
+                console.error(error);
+            }
+        }
+        
+        // Allow Enter key to submit
+        document.getElementById('participant-id').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                loadParticipant();
+            }
+        });
+    </script>
+</body>
+</html>
+
