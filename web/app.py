@@ -9,9 +9,12 @@ import json
 from pathlib import Path
 from flask import Flask, render_template, jsonify, request
 
-app = Flask(__name__, template_folder='templates')
+# Get the directory where this script is located
+WEB_DIR = Path(__file__).resolve().parent
+ROOT = WEB_DIR.parent
 
-ROOT = Path(__file__).resolve().parents[1]
+app = Flask(__name__, template_folder=str(WEB_DIR / 'templates'))
+
 RESULTS_DIR = ROOT / "results"
 
 
