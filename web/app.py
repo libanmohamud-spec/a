@@ -22,6 +22,11 @@ def load_assignment(pid: str) -> dict:
     """Load assignment.json for a participant."""
     assignment_path = RESULTS_DIR / pid / "assignment.json"
     if not assignment_path.exists():
+        print(f"DEBUG: Assignment not found at {assignment_path}")
+        print(f"DEBUG: RESULTS_DIR = {RESULTS_DIR}")
+        print(f"DEBUG: RESULTS_DIR exists = {RESULTS_DIR.exists()}")
+        if RESULTS_DIR.exists():
+            print(f"DEBUG: Contents of results/: {list(RESULTS_DIR.iterdir())}")
         return None
     return json.loads(assignment_path.read_text(encoding="utf-8"))
 
@@ -54,9 +59,18 @@ def index():
 @app.route('/api/participant/<participant_id>')
 def get_participant_data(participant_id):
     """Get participant data as JSON."""
+    print(f"DEBUG: Looking for participant {participant_id}")
     assignment = load_assignment(participant_id)
     if not assignment:
-        return jsonify({"error": "Participant not found"}), 404
+        return jsonify({
+            "error": "Participant not found",
+            "debug": {
+                "results_dir": str(RESULTS_DIR),
+                "results_dir_exists": RESULTS_DIR.exists(),
+                "participant_dir": str(RESULTS_DIR / participant_id),
+                "participant_dir_exists": (RESULTS_DIR / participant_id).exists() if RESULTS_DIR.exists() else False,
+            }
+        }), 404
     
     data = {
         "participant_id": participant_id,
