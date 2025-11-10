@@ -1,0 +1,22 @@
+{
+  "name": "Python Experiment Codespace",
+  "image": "mcr.microsoft.com/devcontainers/python:3.11",
+  "features": {
+    "ghcr.io/devcontainers/features/github-cli:1": {},
+    "ghcr.io/devcontainers/features/common-utils:2": {}
+  },
+  "remoteEnv": {
+    "PYTHONUNBUFFERED": "1"
+  },
+  "postCreateCommand": "chmod +x bin/* || true && pip install -r requirements.txt",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-python.python",
+        "ms-python.vscode-pylance",
+        "ms-toolsai.jupyter",
+        "streetsidesoftware.code-spell-checker"
+      ]
+    }
+  }
+}

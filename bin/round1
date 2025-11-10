@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+set -euo pipefail
+if [[ $# -lt 1 ]]; then
+  echo "Usage: bin/round1 <participant_id>" >&2
+  exit 1
+fi
+python scripts/prepare_workspace.py "$1" 1
+echo "Round 1 ready in assignments/round1"
+

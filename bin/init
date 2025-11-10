@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+if [[ $# -lt 2 ]]; then
+  echo "Usage: bin/init <participant_id> <yes|no>" >&2
+  exit 1
+fi
+
+python scripts/setup_session.py "$1" "$2"
+echo "Now prepare round 1 with: bin/round1 $1"
+
