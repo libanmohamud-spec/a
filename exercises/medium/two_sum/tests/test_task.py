@@ -1,11 +1,14 @@
-import sys
+import importlib.util
 from pathlib import Path
 
-# Add parent directory (where task.py is) to Python path
-sys.path.insert(0, str(Path(__file__).parent.parent))
+# Load task module from parent directory explicitly
+task_path = Path(__file__).parent.parent / "task.py"
+spec = importlib.util.spec_from_file_location("task", task_path)
+task = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(task)
+two_sum = task.two_sum
 
 import pytest
-from task import two_sum
 
 
 def test_two_sum_basic():
