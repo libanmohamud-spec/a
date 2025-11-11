@@ -17,13 +17,16 @@ Quick start (as organizer)
    This checks you have sufficient exercises (minimum 2 per pool, recommended 5+).
 
 2) Ensure repository is accessible:
-   - For public repo: Already accessible
-   - For private repo: Add participants as collaborators (Settings → Collaborators)
+   - **For public repo:** Already accessible to everyone
+   - **For private repo:** Add participants as collaborators:
+     - Go to: Settings → Collaborators → Add people
+     - Add each participant's GitHub username
+     - Give them "Read" access (or "Write" if they need to push results)
 
 3) Share with participants:
    - Repository URL: https://github.com/libanmohamud-spec/a
-   - Link to PARTICIPANT_GUIDE.md
-   - Instructions to create a Codespace
+   - Tell them: "Click Code → Codespaces → Create codespace on main"
+   - Share QUICK_START.md for step-by-step instructions
 
 4) See PRODUCTION_SETUP.md for detailed launch checklist.
 
