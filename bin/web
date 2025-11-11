@@ -1,7 +1,0 @@
-#!/usr/bin/env bash
-set -euo pipefail
-
-# Change to web directory to ensure templates are found
-cd "$(dirname "$0")/.."
-python web/app.py
-

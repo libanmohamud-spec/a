@@ -11,13 +11,6 @@ Welcome! This guide will help you complete the coding experiment.
 3. Select **"Create codespace on main"**
 4. Wait 2-3 minutes for setup to complete
 
-### Optional: Web Dashboard
-
-You can view your progress in a web browser:
-1. Run: `bin/web` (or `python web/app.py`)
-2. Open the forwarded port URL (Codespaces will show it automatically)
-3. Enter your participant ID to see your status, assignments, and test results
-
 ### Step 2: Initialize Your Session
 
 Once your Codespace is ready, open the terminal and run:

@@ -55,13 +55,6 @@ Ensure participants have access to:
 - `README.md` - Main documentation
 - `PARTICIPANT_GUIDE.md` - Step-by-step participant instructions
 
-### 5. Web Dashboard (Optional)
-
-If using the web dashboard:
-- Test that `bin/web` works in Codespaces
-- Document the port forwarding process
-- Ensure Flask is in requirements.txt (already included)
-
 ## Launch Steps
 
 ### Step 1: Final Validation
@@ -131,10 +124,6 @@ python scripts/aggregate_results.py -o reports/final_results.csv
 - Check `results/` directory permissions
 - Ensure participants have write access
 
-**Web dashboard not working:**
-- Verify Flask is installed: `pip install flask`
-- Check port forwarding in Codespaces
-- Review terminal output for errors
 
 ## Support
 
